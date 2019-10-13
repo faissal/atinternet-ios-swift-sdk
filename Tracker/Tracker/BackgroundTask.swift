@@ -85,7 +85,7 @@ public class BackgroundTask {
         let identifier = -1
 #endif
         
-        tasks[taskKey] = identifier
+        tasks[taskKey] = identifier.rawValue
         
         if(completion != nil) {
             tasksCompletionBlocks[taskKey] = completion
@@ -119,13 +119,23 @@ public class BackgroundTask {
 
 #if !AT_EXTENSION
             // On arrete la tache en arrière plan
-            UIApplication.shared.endBackgroundTask(taskId)
+            UIApplication.shared.endBackgroundTask(convertToUIBackgroundTaskIdentifier(taskId))
 #endif
 
-            tasks[key] = UIBackgroundTaskInvalid
+            tasks[key] = convertFromUIBackgroundTaskIdentifier(UIBackgroundTaskIdentifier.invalid)
             tasks.removeValue(forKey: key)
         }
         
         objc_sync_exit(self.tasks)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIBackgroundTaskIdentifier(_ input: Int) -> UIBackgroundTaskIdentifier {
+	return UIBackgroundTaskIdentifier(rawValue: input)
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIBackgroundTaskIdentifier(_ input: UIBackgroundTaskIdentifier) -> Int {
+	return input.rawValue
 }

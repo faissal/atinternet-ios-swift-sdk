@@ -110,7 +110,7 @@ class Debugger {
         gestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(Debugger.debugButtonWasDragged(_:)))
         debugButton.addGestureRecognizer(gestureRecogniser)
         
-        viewController!.view.bringSubview(toFront: debugButton)
+        viewController!.view.bringSubviewToFront(debugButton)
     }
     
     /**
@@ -150,7 +150,7 @@ class Debugger {
      Create debug button
      */
     func createDebugButton() {
-        debugButton.setBackgroundImage(UIImage(named: "atinternet-logo", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControlState())
+        debugButton.setBackgroundImage(UIImage(named: "atinternet-logo", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControl.State())
         debugButton.frame = CGRect(x: 0, y: 0, width: 94, height: 73)
         debugButton.translatesAutoresizingMaskIntoConstraints = false
         debugButton.alpha = 0
@@ -160,18 +160,18 @@ class Debugger {
         // align atButton from the left
         if(debugButtonPosition == "Right") {
             debugButtonConstraint = NSLayoutConstraint(item: debugButton,
-                                                       attribute: NSLayoutAttribute.trailing,
-                                                       relatedBy: NSLayoutRelation.equal,
+                                                       attribute: NSLayoutConstraint.Attribute.trailing,
+                                                       relatedBy: NSLayoutConstraint.Relation.equal,
                                                        toItem: self.viewController!.view,
-                                                       attribute: NSLayoutAttribute.trailing,
+                                                       attribute: NSLayoutConstraint.Attribute.trailing,
                                                        multiplier: 1.0,
                                                        constant: 0)
         } else {
             debugButtonConstraint = NSLayoutConstraint(item: debugButton,
-                                                       attribute: NSLayoutAttribute.leading,
-                                                       relatedBy: NSLayoutRelation.equal,
+                                                       attribute: NSLayoutConstraint.Attribute.leading,
+                                                       relatedBy: NSLayoutConstraint.Relation.equal,
                                                        toItem: self.viewController!.view,
-                                                       attribute: NSLayoutAttribute.leading,
+                                                       attribute: NSLayoutConstraint.Attribute.leading,
                                                        multiplier: 1.0,
                                                        constant: 0)
         }
@@ -179,25 +179,25 @@ class Debugger {
         self.viewController!.view.addConstraint(debugButtonConstraint)
         
         self.viewController!.view.addConstraint(NSLayoutConstraint(item: self.viewController!.bottomLayoutGuide,
-            attribute: NSLayoutAttribute.top,
-            relatedBy: NSLayoutRelation.equal,
+            attribute: NSLayoutConstraint.Attribute.top,
+            relatedBy: NSLayoutConstraint.Relation.equal,
             toItem: debugButton,
-            attribute: NSLayoutAttribute.bottom,
+            attribute: NSLayoutConstraint.Attribute.bottom,
             multiplier: 1.0,
             constant: 10))
         
         // width constraint
-        self.viewController!.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[debugButton(==94)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["debugButton": debugButton]))
+        self.viewController!.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[debugButton(==94)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["debugButton": debugButton]))
         
         // height constraint
-        self.viewController!.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[debugButton(==73)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["debugButton": debugButton]))
+        self.viewController!.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[debugButton(==73)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["debugButton": debugButton]))
         
-        debugButton.addTarget(self, action: #selector(Debugger.debuggerTouched), for: UIControlEvents.touchUpInside)
+        debugButton.addTarget(self, action: #selector(Debugger.debuggerTouched), for: UIControl.Event.touchUpInside)
         
         UIView.animate(
             withDuration: 0.4,
             delay: 0.0,
-            options: UIViewAnimationOptions.curveLinear,
+            options: UIView.AnimationOptions.curveLinear,
             animations: {
                 self.debugButton.alpha = 1.0;
             },
@@ -213,15 +213,15 @@ class Debugger {
         
         let velocity = recogniser.velocity(in: button)
         
-        if (recogniser.state == UIGestureRecognizerState.changed)
+        if (recogniser.state == UIGestureRecognizer.State.changed)
         {
             button.center = CGPoint(x: button.center.x + translation.x, y: button.center.y)
             recogniser.setTranslation(CGPoint.zero, in: button)
         }
-        else if (recogniser.state == UIGestureRecognizerState.ended)
+        else if (recogniser.state == UIGestureRecognizer.State.ended)
         {
             if(velocity.x < 0) {
-                UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                UIView.animate(withDuration: 0.2, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
                     self.debugButtonConstraint.constant = (self.viewController!.view.frame.width - button.frame.width) * -1
                     self.viewController!.view.layoutIfNeeded()
                     self.viewController!.view.updateConstraints()
@@ -231,17 +231,17 @@ class Debugger {
                         self.viewController!.view.removeConstraint(self.debugButtonConstraint)
                         
                         self.debugButtonConstraint = NSLayoutConstraint(item: self.debugButton,
-                            attribute: NSLayoutAttribute.leading,
-                            relatedBy: NSLayoutRelation.equal,
+                            attribute: NSLayoutConstraint.Attribute.leading,
+                            relatedBy: NSLayoutConstraint.Relation.equal,
                             toItem: self.viewController!.view,
-                            attribute: NSLayoutAttribute.leading,
+                            attribute: NSLayoutConstraint.Attribute.leading,
                             multiplier: 1.0,
                             constant: 0)
                         
                         self.viewController!.view.addConstraint(self.debugButtonConstraint)
                 })
             } else {
-                UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                UIView.animate(withDuration: 0.2, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
                     self.debugButtonConstraint.constant = (self.viewController!.view.frame.width - button.frame.width)
                     self.viewController!.view.layoutIfNeeded()
                     self.viewController!.view.updateConstraints()
@@ -251,10 +251,10 @@ class Debugger {
                         self.viewController!.view.removeConstraint(self.debugButtonConstraint)
                         
                         self.debugButtonConstraint = NSLayoutConstraint(item: self.debugButton,
-                            attribute: NSLayoutAttribute.trailing,
-                            relatedBy: NSLayoutRelation.equal,
+                            attribute: NSLayoutConstraint.Attribute.trailing,
+                            relatedBy: NSLayoutConstraint.Relation.equal,
                             toItem: self.viewController!.view,
-                            attribute: NSLayoutAttribute.trailing,
+                            attribute: NSLayoutConstraint.Attribute.trailing,
                             multiplier: 1.0,
                             constant: 0)
                         
@@ -278,7 +278,7 @@ class Debugger {
             UIView.animate(
                 withDuration: 0.2,
                 delay: 0.0,
-                options: UIViewAnimationOptions.curveLinear,
+                options: UIView.AnimationOptions.curveLinear,
                 animations: {
                     for w in self.windows {
                         w.content.alpha = 0.0
@@ -303,7 +303,7 @@ class Debugger {
         UIView.animate(
             withDuration: 0.2,
             delay: 0.0,
-            options: UIViewAnimationOptions.curveEaseIn,
+            options: UIView.AnimationOptions.curveEaseIn,
             animations: {
                 if(self.debuggerShown) {
                     if(self.debugButtonPosition == "Right") {
@@ -328,7 +328,7 @@ class Debugger {
                     UIView.animate(
                         withDuration: 0.2,
                         delay: 0.0,
-                        options: UIViewAnimationOptions.curveLinear,
+                        options: UIView.AnimationOptions.curveLinear,
                         animations: {
                             for w in self.windows {
                                 w.content.alpha = 1.0
@@ -337,7 +337,7 @@ class Debugger {
                         },
                         completion: nil)
                     
-                    self.viewController!.view.bringSubview(toFront: self.windows[self.windows.count - 1].window)
+                    self.viewController!.view.bringSubviewToFront(self.windows[self.windows.count - 1].window)
                 } else {
                     for w in self.windows {
                         w.window.isHidden = true
@@ -359,18 +359,18 @@ class Debugger {
         
         let offlineButton = UIButton()
         offlineButton.translatesAutoresizingMaskIntoConstraints = false
-        offlineButton.setBackgroundImage(UIImage(named: "database64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControlState())
-        offlineButton.addTarget(self, action: #selector(Debugger.createOfflineHitsViewer), for: UIControlEvents.touchUpInside)
+        offlineButton.setBackgroundImage(UIImage(named: "database64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControl.State())
+        offlineButton.addTarget(self, action: #selector(Debugger.createOfflineHitsViewer), for: UIControl.Event.touchUpInside)
         
         eventViewer.menu.addSubview(offlineButton)
         
         // width constraint
-        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[offlineButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["offlineButton": offlineButton]))
+        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[offlineButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["offlineButton": offlineButton]))
         
         // height constraint
-        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[offlineButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["offlineButton": offlineButton]))
+        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[offlineButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["offlineButton": offlineButton]))
         
-        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[offlineButton]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["offlineButton": offlineButton]))
+        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[offlineButton]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["offlineButton": offlineButton]))
         
         // align messageLabel from the top and bottom
         eventViewer.menu.addConstraint(NSLayoutConstraint(item: offlineButton,
@@ -409,16 +409,16 @@ class Debugger {
         
         trashButton.translatesAutoresizingMaskIntoConstraints = false
         
-        trashButton.setBackgroundImage(UIImage(named: "trash64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControlState())
-        trashButton.addTarget(self, action: #selector(Debugger.trashEvents), for: UIControlEvents.touchUpInside)
+        trashButton.setBackgroundImage(UIImage(named: "trash64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControl.State())
+        trashButton.addTarget(self, action: #selector(Debugger.trashEvents), for: UIControl.Event.touchUpInside)
         
         // width constraint
-        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[trashButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
+        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[trashButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
         
         // height constraint
-        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[trashButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
+        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[trashButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
         
-        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[trashButton]-10-|", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
+        eventViewer.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[trashButton]-10-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
         
         // align messageLabel from the top and bottom
         eventViewer.menu.addConstraint(NSLayoutConstraint(item: trashButton,
@@ -510,9 +510,9 @@ class Debugger {
             eventViewer.content.addSubview(emptyContentView)
             
             // height constraint
-            eventViewer.content.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[emptyContentView(==50)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["emptyContentView": emptyContentView]))
+            eventViewer.content.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[emptyContentView(==50)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["emptyContentView": emptyContentView]))
             
-            eventViewer.content.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[emptyContentView]-30-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["emptyContentView": emptyContentView]))
+            eventViewer.content.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[emptyContentView]-30-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["emptyContentView": emptyContentView]))
             
             // align messageLabel from the top and bottom
             eventViewer.content.addConstraint(NSLayoutConstraint(item: emptyContentView,
@@ -565,7 +565,7 @@ class Debugger {
         
         scrollView.insertSubview(rowView, at: 0)
         
-        scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[rowView]-0-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["rowView": rowView]))
+        scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[rowView]-0-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["rowView": rowView]))
         
         if previousConstraintForEvents != nil {
             scrollView.removeConstraint(previousConstraintForEvents)
@@ -650,10 +650,10 @@ class Debugger {
                                                  constant: -1))
         
         // width constraint
-        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[iconView(==24)]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["iconView": iconView]))
+        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[iconView(==24)]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["iconView": iconView]))
         
         // height constraint
-        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[iconView(==24)]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["iconView": iconView]))
+        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[iconView(==24)]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["iconView": iconView]))
         /******* END ICON ********/
         
         /******* DATE ********/
@@ -691,7 +691,7 @@ class Debugger {
                                                  multiplier: 1.0,
                                                  constant: 10))
         
-        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[messageLabel]-12-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["messageLabel": messageLabel]))
+        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[messageLabel]-12-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["messageLabel": messageLabel]))
         
         /******* END HIT ********/
         
@@ -723,7 +723,7 @@ class Debugger {
         
         rowView.addConstraint(NSLayoutConstraint(item: hitTypeView,
                                                  attribute: .left,
-                                                 relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                 relatedBy: NSLayoutConstraint.Relation.greaterThanOrEqual,
                                                  toItem: messageLabel,
                                                  attribute: .right,
                                                  multiplier: 1.0,
@@ -739,12 +739,12 @@ class Debugger {
                                                  constant: -1))
         
         // width constraint
-        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[hitTypeView(==24)]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["hitTypeView": hitTypeView]))
+        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[hitTypeView(==24)]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["hitTypeView": hitTypeView]))
         
         // height constraint
-        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[hitTypeView(==24)]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["hitTypeView": hitTypeView]))
+        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[hitTypeView(==24)]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["hitTypeView": hitTypeView]))
         
-        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[hitTypeView]-5-|", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["hitTypeView": hitTypeView]))
+        rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[hitTypeView]-5-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["hitTypeView": hitTypeView]))
         
         return rowView
     }
@@ -807,17 +807,17 @@ class Debugger {
         
         backButton.translatesAutoresizingMaskIntoConstraints = false
         
-        backButton.setBackgroundImage(UIImage(named: "back64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControlState())
+        backButton.setBackgroundImage(UIImage(named: "back64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControl.State())
         backButton.tag = self.windows.count - 1
-        backButton.addTarget(self, action: #selector(Debugger.backButtonWasTouched(_:)), for: UIControlEvents.touchUpInside)
+        backButton.addTarget(self, action: #selector(Debugger.backButtonWasTouched(_:)), for: UIControl.Event.touchUpInside)
         
         // width constraint
-        eventDetail.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[backButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
+        eventDetail.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[backButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
         
         // height constraint
-        eventDetail.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[backButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
+        eventDetail.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[backButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
         
-        eventDetail.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[backButton]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
+        eventDetail.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[backButton]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
         
         // align messageLabel from the top and bottom
         eventDetail.menu.addConstraint(NSLayoutConstraint(item: backButton,
@@ -899,7 +899,7 @@ class Debugger {
                 
                 scrollView.addSubview(rowView)
                 
-                scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[rowView]-0-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["rowView": rowView]))
+                scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[rowView]-0-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["rowView": rowView]))
                 
                 if(i == 0) {
                     scrollView.addConstraint(NSLayoutConstraint(item: rowView,
@@ -951,7 +951,7 @@ class Debugger {
                 
                 rowView.addSubview(variableLabel)
                 
-                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[variableLabel(==100)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["variableLabel": variableLabel]))
+                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[variableLabel(==100)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["variableLabel": variableLabel]))
                 
                 rowView.addConstraint(NSLayoutConstraint(item: variableLabel,
                     attribute: .top,
@@ -963,7 +963,7 @@ class Debugger {
                 
                 rowView.addConstraint(NSLayoutConstraint(item: rowView,
                     attribute: .bottom,
-                    relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                    relatedBy: NSLayoutConstraint.Relation.greaterThanOrEqual,
                     toItem: variableLabel,
                     attribute: .bottom,
                     multiplier: 1.0,
@@ -983,7 +983,7 @@ class Debugger {
                 
                 rowView.addSubview(columnSeparator)
                 
-                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[columnSeparator(==1)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["columnSeparator": columnSeparator]))
+                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[columnSeparator(==1)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["columnSeparator": columnSeparator]))
                 
                 rowView.addConstraint(NSLayoutConstraint(item: columnSeparator,
                     attribute: .left,
@@ -993,7 +993,7 @@ class Debugger {
                     multiplier: 1.0,
                     constant: 10))
                 
-                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[columnSeparator]-0-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["columnSeparator": columnSeparator]))
+                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[columnSeparator]-0-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["columnSeparator": columnSeparator]))
                 
                 let valueLabel = UILabel()
                 valueLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -1030,7 +1030,7 @@ class Debugger {
                     multiplier: 1.0,
                     constant: 10))
                 
-                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[valueLabel]-12-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["valueLabel": valueLabel]))
+                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[valueLabel]-12-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["valueLabel": valueLabel]))
                 
                 previousRow = rowView
                 
@@ -1074,7 +1074,7 @@ class Debugger {
                 multiplier: 1.0,
                 constant: 0))
             
-            scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[eventMessageLabel]-10-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["eventMessageLabel": eventMessageLabel]))
+            scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[eventMessageLabel]-10-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["eventMessageLabel": eventMessageLabel]))
         }
         
         return eventDetail.window
@@ -1100,17 +1100,17 @@ class Debugger {
         
         backButton.translatesAutoresizingMaskIntoConstraints = false
         
-        backButton.setBackgroundImage(UIImage(named: "back64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControlState())
+        backButton.setBackgroundImage(UIImage(named: "back64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControl.State())
         backButton.tag = self.windows.count - 1
-        backButton.addTarget(self, action: #selector(Debugger.backButtonWasTouched(_:)), for: UIControlEvents.touchUpInside)
+        backButton.addTarget(self, action: #selector(Debugger.backButtonWasTouched(_:)), for: UIControl.Event.touchUpInside)
         
         // width constraint
-        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[backButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
+        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[backButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
         
         // height constraint
-        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[backButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
+        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[backButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
         
-        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[backButton]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
+        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[backButton]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["backButton": backButton]))
         
         // align messageLabel from the top and bottom
         offlineHits.menu.addConstraint(NSLayoutConstraint(item: backButton,
@@ -1127,16 +1127,16 @@ class Debugger {
         
         trashButton.translatesAutoresizingMaskIntoConstraints = false
         
-        trashButton.setBackgroundImage(UIImage(named: "trash64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControlState())
-        trashButton.addTarget(self, action: #selector(Debugger.trashOfflineHits), for: UIControlEvents.touchUpInside)
+        trashButton.setBackgroundImage(UIImage(named: "trash64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControl.State())
+        trashButton.addTarget(self, action: #selector(Debugger.trashOfflineHits), for: UIControl.Event.touchUpInside)
         
         // width constraint
-        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[trashButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
+        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[trashButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
         
         // height constraint
-        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[trashButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
+        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[trashButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
         
-        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[trashButton]-10-|", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
+        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[trashButton]-10-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["trashButton": trashButton]))
         
         // align messageLabel from the top and bottom
         offlineHits.menu.addConstraint(NSLayoutConstraint(item: trashButton,
@@ -1153,14 +1153,14 @@ class Debugger {
         
         refreshButton.translatesAutoresizingMaskIntoConstraints = false
         
-        refreshButton.setBackgroundImage(UIImage(named: "refresh64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControlState())
-        refreshButton.addTarget(self, action: #selector(Debugger.refreshOfflineHits), for: UIControlEvents.touchUpInside)
+        refreshButton.setBackgroundImage(UIImage(named: "refresh64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControl.State())
+        refreshButton.addTarget(self, action: #selector(Debugger.refreshOfflineHits), for: UIControl.Event.touchUpInside)
         
         // width constraint
-        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[refreshButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["refreshButton": refreshButton]))
+        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[refreshButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["refreshButton": refreshButton]))
         
         // height constraint
-        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[refreshButton(==32)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["refreshButton": refreshButton]))
+        offlineHits.menu.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[refreshButton(==32)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["refreshButton": refreshButton]))
         
         // align messageLabel from the top and bottom
         offlineHits.menu.addConstraint(NSLayoutConstraint(item: trashButton,
@@ -1268,9 +1268,9 @@ class Debugger {
             offlineHits.content.addSubview(noOfflineHitsView)
             
             // height constraint
-            offlineHits.content.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[noOfflineHitsView(==50)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["noOfflineHitsView": noOfflineHitsView]))
+            offlineHits.content.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[noOfflineHitsView(==50)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["noOfflineHitsView": noOfflineHitsView]))
             
-            offlineHits.content.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[noOfflineHitsView]-30-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["noOfflineHitsView": noOfflineHitsView]))
+            offlineHits.content.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[noOfflineHitsView]-30-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["noOfflineHitsView": noOfflineHitsView]))
             
             // align messageLabel from the top and bottom
             offlineHits.content.addConstraint(NSLayoutConstraint(item: noOfflineHitsView,
@@ -1314,7 +1314,7 @@ class Debugger {
                 
                 scrollView.addSubview(rowView)
                 
-                scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[rowView]-0-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["rowView": rowView]))
+                scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[rowView]-0-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["rowView": rowView]))
                 
                 if(i == 0) {
                     scrollView.addConstraint(NSLayoutConstraint(item: rowView,
@@ -1408,7 +1408,7 @@ class Debugger {
                     multiplier: 1.0,
                     constant: 10))
                 
-                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[messageLabel]-12-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["messageLabel": messageLabel]))
+                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[messageLabel]-12-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["messageLabel": messageLabel]))
                 
                 /******* END HIT ********/
                 
@@ -1430,7 +1430,7 @@ class Debugger {
                 
                 rowView.addConstraint(NSLayoutConstraint(item: hitTypeView,
                     attribute: .left,
-                    relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                    relatedBy: NSLayoutConstraint.Relation.greaterThanOrEqual,
                     toItem: messageLabel,
                     attribute: .right,
                     multiplier: 1.0,
@@ -1446,20 +1446,20 @@ class Debugger {
                     constant: -1))
                 
                 // width constraint
-                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[hitTypeView(==24)]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["hitTypeView": hitTypeView]))
+                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[hitTypeView(==24)]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["hitTypeView": hitTypeView]))
                 
                 // height constraint
-                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[hitTypeView(==24)]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["hitTypeView": hitTypeView]))
+                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[hitTypeView(==24)]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["hitTypeView": hitTypeView]))
                 
                 /******* DELETE BUTTON ********/
                 
-                deleteButton.setBackgroundImage(UIImage(named: "trash48", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControlState())
+                deleteButton.setBackgroundImage(UIImage(named: "trash48", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControl.State())
                 deleteButton.tag = i
-                deleteButton.addTarget(self, action: #selector(Debugger.deleteOfflineHit(_:)), for: UIControlEvents.touchUpInside)
+                deleteButton.addTarget(self, action: #selector(Debugger.deleteOfflineHit(_:)), for: UIControl.Event.touchUpInside)
                 
                 rowView.addConstraint(NSLayoutConstraint(item: deleteButton,
                     attribute: .leading,
-                    relatedBy: NSLayoutRelation.equal,
+                    relatedBy: NSLayoutConstraint.Relation.equal,
                     toItem: hitTypeView,
                     attribute: .trailing,
                     multiplier: 1.0,
@@ -1475,12 +1475,12 @@ class Debugger {
                     constant: -1))
                 
                 // width constraint
-                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[deleteButton(==24)]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["deleteButton": deleteButton]))
+                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[deleteButton(==24)]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["deleteButton": deleteButton]))
                 
                 // height constraint
-                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[deleteButton(==24)]", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["deleteButton": deleteButton]))
+                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[deleteButton(==24)]", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["deleteButton": deleteButton]))
                 
-                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[deleteButton]-5-|", options: NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["deleteButton": deleteButton]))
+                rowView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[deleteButton]-5-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:["deleteButton": deleteButton]))
                 
                 previousRow = rowView
             }
@@ -1548,13 +1548,13 @@ class Debugger {
         self.viewController!.view.addSubview(window)
         
         if(windows.count == 0) {
-            self.viewController!.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[" + windowId + "]-10-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[windowId: window]))
+            self.viewController!.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[" + windowId + "]-10-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:[windowId: window]))
             
             self.viewController!.view.addConstraint(NSLayoutConstraint(item: window,
-                attribute: NSLayoutAttribute.top,
-                relatedBy: NSLayoutRelation.equal,
+                attribute: NSLayoutConstraint.Attribute.top,
+                relatedBy: NSLayoutConstraint.Relation.equal,
                 toItem: self.viewController!.topLayoutGuide,
-                attribute: NSLayoutAttribute.bottom,
+                attribute: NSLayoutConstraint.Attribute.bottom,
                 multiplier: 1.0,
                 constant: 10))
             
@@ -1568,29 +1568,29 @@ class Debugger {
             
             self.viewController!.view.addConstraint(popupVsButtonConstraint)
         } else {
-            self.viewController!.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[" + windowId + "]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[windowId: window]))
+            self.viewController!.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[" + windowId + "]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:[windowId: window]))
             
             self.viewController!.view.addConstraint(NSLayoutConstraint(item: window,
-                attribute: NSLayoutAttribute.top,
-                relatedBy: NSLayoutRelation.equal,
+                attribute: NSLayoutConstraint.Attribute.top,
+                relatedBy: NSLayoutConstraint.Relation.equal,
                 toItem: self.viewController!.topLayoutGuide,
-                attribute: NSLayoutAttribute.bottom,
+                attribute: NSLayoutConstraint.Attribute.bottom,
                 multiplier: 1.0,
                 constant: 10))
             
             self.viewController!.view.addConstraint(NSLayoutConstraint(item: window,
-                attribute: NSLayoutAttribute.width,
+                attribute: NSLayoutConstraint.Attribute.width,
                 relatedBy: .equal,
                 toItem: windows[0].window,
-                attribute: NSLayoutAttribute.width,
+                attribute: NSLayoutConstraint.Attribute.width,
                 multiplier: 1.0,
                 constant: 0.0))
             
             self.viewController!.view.addConstraint(NSLayoutConstraint(item: window,
-                attribute: NSLayoutAttribute.height,
+                attribute: NSLayoutConstraint.Attribute.height,
                 relatedBy: .equal,
                 toItem: windows[0].window,
-                attribute: NSLayoutAttribute.height,
+                attribute: NSLayoutConstraint.Attribute.height,
                 multiplier: 1.0,
                 constant: 0.0))
         }
@@ -1609,13 +1609,13 @@ class Debugger {
         let menuId = "menu" + String(self.windows.count)
         
         // align topBar from the left and right
-        window.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[" + menuId + "]-0-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[menuId : menu]))
+        window.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[" + menuId + "]-0-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:[menuId : menu]))
         
         // align topBar from the top
-        window.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[" + menuId + "]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[menuId: menu]))
+        window.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[" + menuId + "]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:[menuId: menu]))
         
         // height constraint
-        window.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[" + menuId + "(==60)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[menuId: menu]))
+        window.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[" + menuId + "(==60)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:[menuId: menu]))
         
         let contentId = "content" + String(self.windows.count)
         
@@ -1627,16 +1627,16 @@ class Debugger {
         window.addSubview(content)
         
         // align eventLogContent from the left and right
-        window.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[" + contentId + "]-0-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[contentId: content]))
+        window.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[" + contentId + "]-0-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:[contentId: content]))
         
         // align eventLogContent from the top and bottom@
-        window.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[" + contentId + "]-3-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[contentId: content]))
+        window.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[" + contentId + "]-3-|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:nil, views:[contentId: content]))
         
         window.addConstraint(NSLayoutConstraint(item: content,
-            attribute: NSLayoutAttribute.top,
+            attribute: NSLayoutConstraint.Attribute.top,
             relatedBy: .equal,
             toItem: menu,
-            attribute: NSLayoutAttribute.bottom,
+            attribute: NSLayoutConstraint.Attribute.bottom,
             multiplier: 1.0,
             constant: 0.0))
         
@@ -1673,7 +1673,7 @@ class Debugger {
         UIView.animate(
             withDuration: 0.2,
             delay: 0.0,
-            options: UIViewAnimationOptions.curveLinear,
+            options: UIView.AnimationOptions.curveLinear,
             animations: {
                 for(_, view) in self.windows[self.windows.count - 2].menu.subviews.enumerated() {
                     if let button = view as? UIButton {

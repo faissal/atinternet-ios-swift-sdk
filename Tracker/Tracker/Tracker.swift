@@ -278,8 +278,8 @@ public class Tracker {
         
         if(!LifeCycle.isInitialized) {
             let notificationCenter = NotificationCenter.default
-            notificationCenter.addObserver(self, selector: #selector(Tracker.applicationDidEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-            notificationCenter.addObserver(self, selector: #selector(Tracker.applicationActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+            notificationCenter.addObserver(self, selector: #selector(Tracker.applicationDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+            notificationCenter.addObserver(self, selector: #selector(Tracker.applicationActive), name: UIApplication.didBecomeActiveNotification, object: nil)
             LifeCycle.applicationActive(self.configuration.parameters)
         }
     }
