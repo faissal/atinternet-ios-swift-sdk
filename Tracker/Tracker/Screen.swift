@@ -115,7 +115,7 @@ public class DynamicScreen: AbstractScreen {
         let encodingOption = ParamOption()
         encodingOption.encode = true
         
-        if(screenId.characters.count > 255){
+        if(screenId.count > 255){
             screenId = ""
             tracker.delegate?.warningDidOccur("screenId too long, replaced by empty value")
         }
